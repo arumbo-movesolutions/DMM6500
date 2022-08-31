@@ -108,6 +108,33 @@ class dmm6500:
         self.dmmResource.write(query)
         pass    
 
+    def set2WResistance(self, range = 'auto', autzoero=False, nplc=1, aver = False, tcon='off', count = 1):
+        Res_rangelist = ['auto', 1, 10, 100, 1000, 10e3, 100e3, 1e6, 10e6, 100e6]
+        if range not in Res_rangelist:
+            raise ValueError('not supported in range')
+        if nplc < 1 or nplc > 12:
+            raise ValueError('NPLC has to be between 1 and 12')
+        if autzoero:
+            autozero = 'ON'
+        else:
+            autozero = 'OFF'
+        if aver:
+            if tcon != 'REP' and tcon != 'MOV':
+                raise ValueError('TCON value has to be off, REP or MOV')
+            aver = f'; :SENS:RES:AVER:TCON {tcon}; :SENS:RES:AVER:COUN {count}; :SENS:RES:AVER:STAT ON'
+        else:
+            aver = ''
+
+        if range == 'auto':
+            range = ':AUTO ON'
+        else:
+            range = f' {range}'
+        
+        query = f'*RST; :SENS:FUNC "RES"; :SENS:RES:RANG{range}; :SENS:RES:NPLC {nplc}; :SENS:RES:AZER {autozero}; {aver}'
+        print(query)
+        self.dmmResource.write(query)
+        pass    
+
     def read(self):
         return self.dmmResource.query(':READ?')
 
