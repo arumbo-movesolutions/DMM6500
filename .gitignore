@@ -4,3 +4,4 @@
 !.gitignore
 !Pipfile*
 !setup.py
+!README.md
