@@ -1,0 +1,6 @@
+*
+!DMM6500
+!DMM6500/*
+!.gitignore
+!Pipfile*
+!setup.py
